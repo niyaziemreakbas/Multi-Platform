@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 1360308373171583047}
   - component: {fileID: 8574721899740006536}
   - component: {fileID: 394761143463434819}
-  - component: {fileID: 1546976682240781686}
   - component: {fileID: -4638195809074191145}
+  - component: {fileID: 7566842424477870212}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -114,8 +114,31 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!61 &1546976682240781686
-BoxCollider2D:
+--- !u!114 &-4638195809074191145
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7949387520952361638}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 077b79e7ee8ed144ea70a39f28ebff72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  jumpKey: 0
+  fireKey: 0
+  shieldKey: 0
+  moveInput: Horizontal
+  horizontal: 0
+  groundCheck: {fileID: 0}
+  speed: 8
+  collisionMask:
+    serializedVersion: 2
+    m_Bits: 0
+  startJumpAmount: 2
+--- !u!70 &7566842424477870212
+CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -147,40 +170,5 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 2}
-    newSize: {x: 1, y: 2}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
   m_Size: {x: 1, y: 2}
-  m_EdgeRadius: 0
---- !u!114 &-4638195809074191145
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7949387520952361638}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 077b79e7ee8ed144ea70a39f28ebff72, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  jumpKey: up
-  fireKey: n
-  shieldKey: m
-  moveInput: Horizontal
-  horizontal: 0
-  emre:
-  - sda
-  - g
-  - 
-  - 
-  - 
-  speed: 8
-  jumpsLeft: 2
+  m_Direction: 0

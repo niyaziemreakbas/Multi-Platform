@@ -31,14 +31,16 @@ public class InputController : MonoBehaviour
 
     public LayerMask collisionMask;
 
-    public float jumpsLeft;
+    private float jumpsLeft;
+
+    public float startJumpAmount = 2;
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
 
 
-        jumpsLeft = 2;
+        jumpsLeft = startJumpAmount;
 
         
     }
@@ -58,11 +60,17 @@ public class InputController : MonoBehaviour
         }
         */
 
-        if (jumpInput && IsGrounded())
+        if (jumpInput && jumpsLeft > 0)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpforce);
+            jumpsLeft -= 1;
+        }
+        if(IsGrounded())
+        {
+            jumpsLeft = startJumpAmount; 
         }
 
+        //turn to move direction
         if(horizontal != 0)
         {
             transform.localScale = new Vector3(Mathf.Sign(horizontal), 1, 1);
