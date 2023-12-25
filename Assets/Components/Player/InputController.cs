@@ -14,7 +14,7 @@ public class InputController : MonoBehaviour
     public string moveInput;
     public float horizontal;
 
-
+    
 
     public Transform groundCheck;
 
@@ -24,10 +24,13 @@ public class InputController : MonoBehaviour
 
     public float speed = 5f;
 
-
+    
 
     bool jumpInput;
 
+    bool shieldInput;
+
+    bool fireInput;
 
     public LayerMask collisionMask;
 
@@ -52,13 +55,22 @@ public class InputController : MonoBehaviour
 
 
         jumpInput = Input.GetKeyDown(jumpKey);
-        /*
-        if (jumpInput)
+
+        shieldInput = Input.GetKeyDown(shieldKey);
+
+        fireInput = Input.GetKeyDown(fireKey);
+
+        
+        if (fireInput)
         {
-            Debug.Log("input alýndý");
-            rb.velocity = new Vector2(rb.velocity.x, jumpforce);
+            
         }
-        */
+
+        if (shieldInput)
+        {
+            
+        }
+        
 
         if (jumpInput && jumpsLeft > 0)
         {
@@ -81,8 +93,6 @@ public class InputController : MonoBehaviour
 
     private bool IsGrounded()
     {
-        Debug.Log("ÇAlýþtý");
-
         return Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, collisionMask);
     }
 
