@@ -1,20 +1,22 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEditor.Searcher.SearcherWindow.Alignment;
+using Photon.Realtime;
 
-public class InputController : MonoBehaviour
+public class InputController : MonoBehaviourPunCallbacks
 {
+    Rigidbody2D playerRb;
 
-    Rigidbody2D rb;
 
     public KeyCode jumpKey;
-    public KeyCode fireKey;
     public KeyCode shieldKey;
     public string moveInput;
     public float horizontal;
 
-    
+
+    public bool directRight = true;
 
     public Transform groundCheck;
 
@@ -24,71 +26,92 @@ public class InputController : MonoBehaviour
 
     public float speed = 5f;
 
-    
-
     bool jumpInput;
 
     bool shieldInput;
 
-    bool fireInput;
 
     public LayerMask collisionMask;
 
     private float jumpsLeft;
 
     public float startJumpAmount = 2;
+
+    public GameObject shield;
+
+    PhotonView pw;
+
     // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
+        playerRb = GetComponent<Rigidbody2D>();
 
 
         jumpsLeft = startJumpAmount;
 
-        
+        pw = GetComponent<PhotonView>();
     }
+
 
     // Update is called once per frame
     void Update()
     {
-        horizontal = Input.GetAxisRaw(moveInput);
-
-
-        jumpInput = Input.GetKeyDown(jumpKey);
-
-        shieldInput = Input.GetKeyDown(shieldKey);
-
-        fireInput = Input.GetKeyDown(fireKey);
-
-        
-        if (fireInput)
+        if (!photonView.IsMine)
         {
-            
+            GetComponent<Renderer>().material.color = Color.red;
         }
 
-        if (shieldInput)
+        if (photonView.IsMine)
         {
-            
-        }
-        
+            horizontal = Input.GetAxisRaw(moveInput);
 
-        if (jumpInput && jumpsLeft > 0)
-        {
-            rb.velocity = new Vector2(rb.velocity.x, jumpforce);
-            jumpsLeft -= 1;
-        }
-        if(IsGrounded())
-        {
-            jumpsLeft = startJumpAmount; 
-        }
+            jumpInput = Input.GetKeyDown(jumpKey);
 
-        //turn to move direction
-        if(horizontal != 0)
-        {
-            transform.localScale = new Vector3(Mathf.Sign(horizontal), 1, 1);
-        }
-        
+            shieldInput = Input.GetKeyDown(shieldKey);
 
+
+            if (shieldInput)
+            {
+                shield.SetActive(!shield.activeSelf);
+            }
+
+
+            if (jumpInput && jumpsLeft > 0)
+            {
+                playerRb.velocity = new Vector2(playerRb.velocity.x, jumpforce);
+                jumpsLeft -= 1;
+            }
+
+
+            if (IsGrounded())
+            {
+                jumpsLeft = startJumpAmount;
+            }
+
+
+            //turn to move direction
+            if (horizontal == -1 && directRight)
+            {
+                directRight = false;
+
+                transform.Rotate(0, 180, 0);
+            }
+            else if (horizontal == 1 && directRight == false)
+            {
+
+                directRight = true;
+
+                transform.Rotate(0, 180, 0);
+            }
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (photonView.IsMine)
+        {
+            playerRb.velocity = new Vector2(horizontal * speed, playerRb.velocity.y);
+        }
     }
 
     private bool IsGrounded()
@@ -96,15 +119,5 @@ public class InputController : MonoBehaviour
         return Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, collisionMask);
     }
 
-    private void FixedUpdate()
-    {
 
-
-        rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
-
-    }
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);   
-    }
 }
