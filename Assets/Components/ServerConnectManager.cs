@@ -3,24 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
-using UnityEditor;
 using TMPro;
 
 public class ServerConnectManager : MonoBehaviourPunCallbacks
 {
-    UserData playerData;
+    Player localPlayer;
 
-    public TextMeshProUGUI healthText;
-    
+    string nickName = "Unknown";
+
+
     // Start is called before the first frame update
     void Start()
     {
-        playerData = PlayerDataManager.Instance.GetPlayerData(PhotonNetwork.NickName);
+        localPlayer = PhotonNetwork.LocalPlayer;
+        
         PhotonNetwork.ConnectUsingSettings();
     }
     private void Update()
     {
-        healthText.text = playerData.health.ToString();
         // Debug.Log(PhotonNetwork.PlayerList.Length);
     }
     public override void OnConnectedToMaster()
@@ -46,33 +46,15 @@ public class ServerConnectManager : MonoBehaviourPunCallbacks
 
     void SpawnPlayer()
     {
-        WeaponType weaponType = null;
-        string nickName = "Unknown";
 
-
-        Debug.Log("New Player Joined");
         GameObject player = PhotonNetwork.Instantiate("Player", Vector3.zero, Quaternion.identity, 0, null);
-        Transform weapon = player.transform.Find("Weapon");
 
-        nickName = playerData.nickName;
+        WeaponTypeManager.Instance.UpdatePlayersWeaponSprite();
 
-        weaponType = playerData.weaponType;
-        Debug.Log(nickName + "'s weapon type is: " + weaponType);
+        nickName = PlayerDataManager.Instance.GetPlayerName(localPlayer);
 
-        if (weapon != null)
-        {
-            SpriteRenderer weaponSpriteRenderer = weapon.GetComponent<SpriteRenderer>();
-            if (weaponSpriteRenderer != null)
-            {
+        Debug.Log("New Player Joined : " + nickName);
 
-                weaponSpriteRenderer.sprite = weaponType.weaponSprite;
-                Debug.Log("Weapon sprite has been changed");
-            }
-            else
-            {
-                Debug.LogWarning("Weapon object does not have a SpriteRenderer component.");
-            }
-        }   
     }
 
     public override void OnJoinRoomFailed(short returnCode, string message)

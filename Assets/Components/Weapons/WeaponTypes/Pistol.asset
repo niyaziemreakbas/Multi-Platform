@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletCapacity: 12
   reloadSpeed: 5
-  weaponSprite: {fileID: 21300000, guid: 8dabfe3a1eddc5248a86a0f82e9b0d09, type: 3}
-  weaponName: pistol
+  weaponSprite: {fileID: 21300000, guid: dc08e8904ca737d4b8d8437df38ff323, type: 3}
+  weaponName: Pistol
   bulletPrefab: {fileID: 6438310685634175519, guid: 808a4ff2a7acd6d42be05952ecc561da, type: 3}

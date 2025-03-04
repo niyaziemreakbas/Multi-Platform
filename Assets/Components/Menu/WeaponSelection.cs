@@ -9,11 +9,9 @@ using UnityEngine.UI;
 
 public class WeaponSelection : MonoBehaviour
 {
-    UserData playerData;
+    //public WeaponType[] weaponTypes; // Tüm silahlar
 
-    public WeaponType[] weaponTypes; // Tüm silahlar
-
-    public int playerHealth = 3;
+    int playerHealth = 3;
 
     public Image weaponImage; // Silah resmini göstermek için UI Image
     private int currentIndex = 0; // Þu anda seçili olan silahýn indeksi
@@ -32,32 +30,20 @@ public class WeaponSelection : MonoBehaviour
             return;
         }
 
-        SetPlayerAttributes(nickName.text, playerHealth, weaponTypes[currentIndex]);
+        PlayerDataManager.Instance.SetPlayerData(nickName.text, WeaponTypeManager.Instance.WeaponTypes[currentIndex].weaponName, playerHealth);
 
         SceneManager.LoadScene("Game");
-    }
-    public void SetPlayerAttributes(string name, int health, WeaponType weaponType)
-    {
-        playerData = ScriptableObject.CreateInstance<UserData>();
-        playerData.nickName = name;
-        playerData.health = health;
-        playerData.weaponType=weaponType;
-
-        PhotonNetwork.NickName = name;
-        PlayerDataManager.Instance.AddPlayerData(name, playerData);
-        Debug.Log($"Player : {name} added to Dictioanary");
-        Debug.Log($"Its Health : {health}");
     }
 
     public void UpdateWeaponImage()
     {
-        weaponImage.sprite = weaponTypes[currentIndex].weaponSprite;
+        weaponImage.sprite = WeaponTypeManager.Instance.WeaponTypes[currentIndex].weaponSprite;
     }
 
     public void NextWeapon()
     {
         currentIndex++;
-        if (currentIndex >= weaponTypes.Length)
+        if (currentIndex >= WeaponTypeManager.Instance.WeaponTypes.Count)
         {
             currentIndex = 0;
         }
@@ -69,7 +55,7 @@ public class WeaponSelection : MonoBehaviour
         currentIndex--;
         if (currentIndex < 0)
         {
-            currentIndex = weaponTypes.Length - 1;
+            currentIndex = WeaponTypeManager.Instance.WeaponTypes.Count - 1;
         }
         UpdateWeaponImage();
     }

@@ -9,6 +9,6 @@ public class WeaponType : ScriptableObject
     public float reloadSpeed;
     public Sprite weaponSprite;
     public string weaponName;
-    
+
     public GameObject bulletPrefab;
 }

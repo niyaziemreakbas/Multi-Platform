@@ -11,9 +11,4 @@ public class BulletType : ScriptableObject
 
     public float pushPower;
 
-    //public float fireSpeed;
-
-    //public float bulletCapacity;
-
-    //public float reloadSpeed;
 }

@@ -1,14 +1,14 @@
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using Photon.Realtime;
 
-public class InputController : MonoBehaviourPunCallbacks
+public class InputController : MonoBehaviourPunCallbacks, IObserver
 {
-    Rigidbody2D playerRb;
 
+    Rigidbody2D playerRb;
+    Animator playerAnim;
 
     public KeyCode jumpKey;
     public KeyCode shieldKey;
@@ -37,7 +37,7 @@ public class InputController : MonoBehaviourPunCallbacks
 
     public float startJumpAmount = 2;
 
-    public GameObject shield;
+    //public GameObject shield;
 
     PhotonView pw;
 
@@ -46,12 +46,21 @@ public class InputController : MonoBehaviourPunCallbacks
     {
         playerRb = GetComponent<Rigidbody2D>();
 
+        playerAnim = GetComponent<Animator>();
 
         jumpsLeft = startJumpAmount;
 
         pw = GetComponent<PhotonView>();
+
+        PlayerDataManager.Instance.RegisterObserver(this);
+
     }
 
+    public void OnDataChanged()
+    {
+        //Player's health changed so jump should assign to start amount again.
+        jumpsLeft = startJumpAmount;
+    }
 
     // Update is called once per frame
     void Update()
@@ -68,28 +77,30 @@ public class InputController : MonoBehaviourPunCallbacks
             jumpInput = Input.GetKeyDown(jumpKey);
 
             shieldInput = Input.GetKeyDown(shieldKey);
-
+            /*
 
             if (shieldInput)
             {
                 shield.SetActive(!shield.activeSelf);
             }
 
-
+            */
             if (jumpInput && jumpsLeft > 0)
             {
                 playerRb.velocity = new Vector2(playerRb.velocity.x, jumpforce);
                 jumpsLeft -= 1;
+                playerAnim.SetBool("isJumping", true);
             }
 
 
+            //Assign jump amount to start amount
             if (IsGrounded())
             {
                 jumpsLeft = startJumpAmount;
+                playerAnim.SetBool("isJumping", false);
             }
 
 
-            //turn to move direction
             if (horizontal == -1 && directRight)
             {
                 directRight = false;
@@ -103,8 +114,13 @@ public class InputController : MonoBehaviourPunCallbacks
 
                 transform.Rotate(0, 180, 0);
             }
+
+            // Hareket animasyonu için
+            playerAnim.SetBool("isMoving", horizontal != 0);
+
         }
     }
+
 
     private void FixedUpdate()
     {
@@ -118,6 +134,14 @@ public class InputController : MonoBehaviourPunCallbacks
     {
         return Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, collisionMask);
     }
-
-
+    /*
+    void OnDrawGizmos()
+    {
+        if (groundCheck != null)
+        {
+            Gizmos.color = Color.red; // Çemberin rengini ayarlayabilirsin
+            Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius); // Çemberi sahneye çiz
+        }
+    }
+    */
 }

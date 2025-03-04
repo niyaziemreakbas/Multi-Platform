@@ -1,24 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
 using Photon.Realtime;
 using Photon.Pun;
 public class Weapon : MonoBehaviourPunCallbacks
 {
     public KeyCode fireKey;
-    public WeaponType weaponType;
     public Transform firePos;
     bool fireInput;
     
-    
-    GameObject bulletPrefab;
-
+    Player localPlayer;
 
     private void Start()
     {
-        bulletPrefab = weaponType.bulletPrefab;
+
+        localPlayer = PhotonNetwork.LocalPlayer;
 
     }
 
@@ -27,17 +23,15 @@ public class Weapon : MonoBehaviourPunCallbacks
         if (photonView.IsMine)
         {
             fireInput = Input.GetKeyDown(fireKey);
-
             if (fireInput)
             {
                 Fire();
-
             }
         }
     }
 
     public void Fire()
     {
-        GameObject tempBullet = Instantiate(bulletPrefab, firePos.position, firePos.rotation);
+        GameObject tempBullet = PhotonNetwork.Instantiate(PlayerDataManager.Instance.GetWeaponName(localPlayer), firePos.position, firePos.rotation);
     }
 }

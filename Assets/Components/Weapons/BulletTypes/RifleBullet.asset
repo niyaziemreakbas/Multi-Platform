@@ -12,8 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1738461468b98b343abb7364daaed7cc, type: 3}
   m_Name: RifleBullet
   m_EditorClassIdentifier: 
-  bulletPrefab: {fileID: 0}
-  bulletSpeed: 15
-  pushPower: 5
-  fireSpeed: 20
-  reloadSpeed: 20
+  bulletSpeed: 30
+  pushPower: 30
